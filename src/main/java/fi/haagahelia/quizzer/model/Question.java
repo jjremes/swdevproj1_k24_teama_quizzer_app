@@ -1,10 +1,16 @@
 package fi.haagahelia.quizzer.model;
 
-
-
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
 
 @Entity
 public class Question {
@@ -25,9 +31,9 @@ public class Question {
     @JoinColumn(name = "quizId")
     private Quiz quiz;
 
-    public Question() {
-
-    }
+    @JsonIgnore 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    private List<Answer> answers;
 
     public Question(String questionText, String correctAnswer, String difficultyLevel, Quiz quiz) {
         this.questionText = questionText;
@@ -36,44 +42,12 @@ public class Question {
         this.quiz = quiz;
     }
 
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        this.questionId = questionId;
-    }
-
-    public String getQuestionText() {
-        return questionText;
-    }
-
-    public void setQuestionText(String questionText) {
+    public Question(String questionText,String correctAnswer, String difficultyLevel, Quiz quiz, List<Answer> answers) {
         this.questionText = questionText;
-    }
-
-    public String getCorrectAnswer() {
-        return correctAnswer;
-    }
-
-    public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
-    }
-
-    public String getDifficultyLevel() {
-        return difficultyLevel;
-    }
-
-    public void setDifficultyLevel(String difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
-    }
-
-    public Quiz getQuiz() {
-        return quiz;
-    }
-
-    public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
+        this.answers = answers;
     }
 
     @Override
